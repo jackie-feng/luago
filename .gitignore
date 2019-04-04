@@ -1,0 +1,8 @@
+pkg/
+bin/
+*.DS_Store
+*.out
+*.luac
+*.ll.txt
+*.output
+coverage.txt
