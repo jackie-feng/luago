@@ -6,3 +6,5 @@ bin/
 *.ll.txt
 *.output
 coverage.txt
+
+.idea
