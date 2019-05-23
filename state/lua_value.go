@@ -3,6 +3,7 @@ package state
 import "luago/api"
 
 type luaValue interface{}
+type LuaType = int
 
 func typeOf(val luaValue) LuaType {
 	switch val.(type) {
