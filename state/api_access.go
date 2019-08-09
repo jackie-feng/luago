@@ -98,8 +98,7 @@ func (self *luaState) ToInteger(idx int) int64 {
 
 func (self *luaState) ToIntegerX(idx int) (int64, bool) {
 	val := self.stack.get(idx)
-	i, ok := val.(int64)
-	return i, ok
+	return convertToInteger(val)
 }
 
 func (self *luaState) ToString(idx int) string {
