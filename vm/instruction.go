@@ -1,5 +1,7 @@
 package vm
 
+import "luago/api"
+
 // MaxArgBX BX 无符号数最大值
 const MaxArgBX = 1<<18 - 1
 
@@ -59,4 +61,13 @@ func (i Instruction) BMode() byte {
 func (i Instruction) CMode() byte {
 	return opcodes[i.Opcode()].argCMode
 
+}
+
+func (i Instruction) Execute(vm api.LuaVM) {
+	action := opcodes[i.Opcode()].action
+	if action != nil {
+		action(i, vm)
+	} else {
+		panic(i.OpName())
+	}
 }
