@@ -3,26 +3,27 @@ package api
 import (
 	"luago/api"
 	"luago/state"
+	"luago/test/support"
 	"testing"
 )
 
 func TestArith(t *testing.T) {
-	ls := state.New()
+	ls := state.New(20, nil)
 
 	ls.PushInteger(1)
 	ls.PushString("2.0")
 	ls.PushString("3.0")
 	ls.PushNumber(4.0)
-	printStack(ls)
+	support.PrintStack(ls)
 
 	ls.Arith(api.LuaOpADD)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.Arith(api.LuaOpBNOT)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.Len(2)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.Concat(3)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.PushBoolean(ls.Compare(1, 2, api.LuaOpEQ))
-	printStack(ls)
+	support.PrintStack(ls)
 }
