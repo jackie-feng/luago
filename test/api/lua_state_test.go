@@ -1,48 +1,29 @@
 package api
 
 import (
-	"fmt"
-	"luago/api"
 	"luago/state"
+	"luago/test/support"
 	"testing"
 )
 
 func TestLuaState(t *testing.T) {
-	ls := state.New()
+	ls := state.New(20, nil)
 	ls.PushBoolean(true)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.PushInteger(10)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.PushNil()
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.PushString("hello")
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.PushValue(-4)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.Replace(3)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.SetTop(6)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.Remove(-3)
-	printStack(ls)
+	support.PrintStack(ls)
 	ls.SetTop(-5)
-	printStack(ls)
-}
-
-func printStack(ls api.LuaState) {
-	top := ls.GetTop()
-	for i := 1; i <= top; i++ {
-		t := ls.Type(i)
-		switch t {
-		case api.LuaTBoolean:
-			fmt.Printf("[%t]", ls.ToBoolean(i))
-		case api.LuaTNumber:
-			fmt.Printf("[%g]", ls.ToNumber(i))
-		case api.LuaTString:
-			fmt.Printf("[%q]", ls.ToString(i))
-		default:
-			fmt.Printf("[%s]", ls.TypeName(t))
-		}
-	}
-	fmt.Println()
+	support.PrintStack(ls)
 }
