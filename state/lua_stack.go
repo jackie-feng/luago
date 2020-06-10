@@ -2,7 +2,8 @@ package state
 
 type luaStack struct {
 	slots []luaValue
-	top   int
+	// top 栈顶指针(从1开始), 下标 + 1
+	top int
 }
 
 func newLuaStack(size int) *luaStack {
@@ -39,7 +40,7 @@ func (s *luaStack) pop() luaValue {
 	return val
 }
 
-// 索引转化为绝对索引
+// 索引转化为绝对索引: 下标 + 1
 func (s *luaStack) absIndex(idx int) int {
 	if idx >= 0 {
 		return idx
@@ -48,11 +49,13 @@ func (s *luaStack) absIndex(idx int) int {
 	return idx + s.top + 1
 }
 
+// 对于 slots len = n, 有效索引 [1, n]
 func (s *luaStack) isValid(idx int) bool {
 	absIdx := s.absIndex(idx)
 	return absIdx > 0 && absIdx <= s.top
 }
 
+// 有效索引 = 下标 + 1
 func (s *luaStack) get(idx int) luaValue {
 	absIndex := s.absIndex(idx)
 	if absIndex > 0 && absIndex <= s.top {
@@ -61,6 +64,7 @@ func (s *luaStack) get(idx int) luaValue {
 	return nil
 }
 
+// @idx: 有效索引
 func (s *luaStack) set(idx int, val luaValue) {
 	absIndex := s.absIndex(idx)
 	if absIndex > 0 && absIndex <= s.top {
@@ -70,6 +74,7 @@ func (s *luaStack) set(idx int, val luaValue) {
 	panic("invalid index!")
 }
 
+// [from ... to]
 func (s *luaStack) reverse(from, to int) {
 	slots := s.slots
 	for from < to {
