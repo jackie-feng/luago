@@ -1,7 +1,10 @@
 package state
 
+// 索引从 1 开始
 type luaStack struct {
 	slots []luaValue
+	// 栈顶的下标 + 1
+	// 等于下一个推入元素的位置
 	top   int
 }
 
@@ -40,6 +43,7 @@ func (s *luaStack) pop() luaValue {
 }
 
 // 索引转化为绝对索引
+// -1 代表第一个
 func (s *luaStack) absIndex(idx int) int {
 	if idx >= 0 {
 		return idx
@@ -48,6 +52,7 @@ func (s *luaStack) absIndex(idx int) int {
 	return idx + s.top + 1
 }
 
+// 索引是否有效: > 0 && <= top
 func (s *luaStack) isValid(idx int) bool {
 	absIdx := s.absIndex(idx)
 	return absIdx > 0 && absIdx <= s.top

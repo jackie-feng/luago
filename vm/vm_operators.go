@@ -3,16 +3,21 @@ package vm
 import "luago/api"
 
 // R(A) := RK(B) op RK(C)
+// 二元运算指令
 func _binaryArith(i Instruction, vm api.LuaVM, op api.ArithOp) {
 	a, b, c := i.ABC()
 	a += 1
+	// 获取 b, c 索引指向到值, 推到栈顶
 	vm.GetRK(b)
 	vm.GetRK(c)
+	// 弹出栈顶元素 计算结果推入栈顶
 	vm.Arith(op)
+	// 弹出栈顶元素 写入指定栈索引处
 	vm.Replace(a)
 }
 
 // R(A) := op R(B)
+// 一元运算指令
 func _unaryArith(i Instruction, vm api.LuaVM, op api.ArithOp) {
 	a, b, _ := i.ABC()
 	a += 1
@@ -66,15 +71,15 @@ func _compare(i Instruction, vm api.LuaVM, op api.CompareOp) {
 	a, b, c := i.ABC()
 	vm.GetRK(b)
 	vm.GetRK(c)
-	if vm.Compare(-2, -1, op) != (a != 0) {
+	if vm.Compare(-2, -1, op) == (a == 0) {
 		vm.AddPC(1)
 	}
 	vm.Pop(2)
 }
 
-func eq(i Instruction, vm api.LuaVM) { _compare(i, vm, api.LuaOpEQ) }
-func lt(i Instruction, vm api.LuaVM) { _compare(i, vm, api.LuaOpLT) }
-func le(i Instruction, vm api.LuaVM) { _compare(i, vm, api.LuaOpLE) }
+func eq(i Instruction, vm api.LuaVM) { _compare(i, vm, api.LuaOpEQ) } // ==
+func lt(i Instruction, vm api.LuaVM) { _compare(i, vm, api.LuaOpLT) } // <
+func le(i Instruction, vm api.LuaVM) { _compare(i, vm, api.LuaOpLE) } // <=
 
 // R(A) := not R(B)
 func not(i Instruction, vm api.LuaVM) {
@@ -99,10 +104,12 @@ func testset(i Instruction, vm api.LuaVM) {
 }
 
 // if not(R(A) <=> C) then pc ++
+// [[false, 1], [true, 1], [false, 0], [true, 0]]
+// [true, false, false, true]
 func test(i Instruction, vm api.LuaVM) {
 	a, _, c := i.ABC()
 	a += 1
-	if vm.ToBoolean(a) != (c != 0) {
+	if vm.ToBoolean(a) == (c == 0) {
 		vm.AddPC(1)
 	}
 }
