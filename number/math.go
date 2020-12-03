@@ -1,13 +1,16 @@
 package number
 
-import "math"
+import (
+	"math"
+)
 
 func IFloorDiv(a, b int64) int64 {
-
-	if a > 0 && b > 0 || a < 0 && b < 0 || a%b == 0 {
+	if (a > 0 && b > 0) || (a < 0 && b < 0) || (a % b == 0) {
 		return a / b
 	} else {
-		return a/b - 1
+		// Go 中向 0 取整, -10 / 3 = -3.33333... => -3
+		// Lua 中向下取整, -10 / 3 = -3.33333... => -4
+		return a / b - 1
 	}
 }
 
@@ -16,11 +19,11 @@ func FFloorDiv(a, b float64) float64 {
 }
 
 func IMod(a, b int64) int64 {
-	return a - IFloorDiv(a, b)*b
+	return a - IFloorDiv(a, b) * b
 }
 
 func FMod(a, b float64) float64 {
-	return a - math.Floor(a/b)*b
+	return a - math.Floor(a / b) * b
 }
 
 func ShiftLeft(a, n int64) int64 {

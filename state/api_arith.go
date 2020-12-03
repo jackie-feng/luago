@@ -13,15 +13,20 @@ var (
 	fsub  = func(a, b float64) float64 { return a - b }
 	imul  = func(a, b int64) int64 { return a * b }
 	fmul  = func(a, b float64) float64 { return a * b }
+	// 求余
 	imod  = number.IMod
 	fmod  = number.FMod
 	pow   = math.Pow
+	// 除法
 	div   = func(a, b float64) float64 { return a / b }
+	// 整除
 	iidiv = number.IFloorDiv
 	fidiv = number.FFloorDiv
+	// 与 或 异或
 	band  = func(a, b int64) int64 { return a & b }
 	bor   = func(a, b int64) int64 { return a | b }
 	bxor  = func(a, b int64) int64 { return a ^ b }
+	// 左移 右移
 	shl   = number.ShiftLeft
 	shr   = number.ShiftRight
 	iunm  = func(a, _ int64) int64 { return -a }
@@ -51,6 +56,9 @@ var operators = []operator{
 	{bnot, nil},
 }
 
+// 运算
+// 从栈顶弹出两元素 a, b, 运算完结果推到栈顶
+// * 一元运算只弹出一个元素 a == b
 func (self *luaState) Arith(op api.ArithOp) {
 	var a, b luaValue
 	b = self.stack.pop()
@@ -69,7 +77,6 @@ func (self *luaState) Arith(op api.ArithOp) {
 }
 
 func _arith(a, b luaValue, op operator) luaValue {
-
 	if op.floatFunc == nil { //bitwise
 		if x, ok := convertToInteger(a); ok {
 			if y, ok := convertToInteger(b); ok {

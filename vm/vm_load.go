@@ -3,6 +3,7 @@ package vm
 import "luago/api"
 
 // R(A), R(A+1), ... , R(A+B) := nil
+// a: 寄存器索引, b: 寄存器数量
 func loadNil(i Instruction, vm api.LuaVM) {
 	a, b, _ := i.ABC()
 	a += 1

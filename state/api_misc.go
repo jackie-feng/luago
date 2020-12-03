@@ -1,5 +1,6 @@
 package state
 
+// idx 处元素的对应类型的长度
 func (self *luaState) Len(idx int) {
 	val := self.stack.get(idx)
 	if s, ok := val.(string); ok {
@@ -10,6 +11,7 @@ func (self *luaState) Len(idx int) {
 	}
 }
 
+// 从栈顶弹出 n 个字符串元素, 拼接在一起, 再 push 到栈顶
 func (self *luaState) Concat(n int) {
 	if n == 0 {
 		self.stack.push("")
