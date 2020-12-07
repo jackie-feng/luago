@@ -46,4 +46,23 @@ type LuaState interface {
 	Compare(idx1, idx2 int, op CompareOp) bool
 	Len(idx int)
 	Concat(n int)
+
+	/* get functions (lua -> stack) */
+	// 无法预估容量, -> CreateTable(0, 0)
+	NewTable()
+	// 创建一个空的lua表， 推入栈顶
+	CreateTable(nArr, nRec int)
+	// idx 为表在栈中的位置
+	// 根据键(栈顶弹出)从表(idx表示的位置)取值, 并将值写入到栈顶
+	GetTable(idx int) LuaType
+	// GetField, GetI 为 GetTable 的包装
+	GetField(idx int, k string) LuaType
+	GetI(idx int, i int64) LuaType
+	/* set functions (stack -> lua) */
+	// idx 为表在栈中的位置
+	// value, key 从栈顶先后弹出, 并将值写入表(idx表示的位置)中
+	SetTable(idx int)
+	// 包装 SetTable, key 由外部传入
+	SetField(idx int, k string)
+	SetI(idx int, i int64)
 }
