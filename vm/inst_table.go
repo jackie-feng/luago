@@ -36,6 +36,10 @@ func setTable(i Instruction, vm api.LuaVM) {
 
 // SETLIST
 // R(A)[(C-1)*FPF + i] := R(A+i), 1 <= i <= B
+// 用于按索引批量设置数组元素
+// 其中数组位于寄存器中，索引由操作数 A 指定
+// 需要写入的一系列值也在寄存器中，紧挨着数组，数量由操作数 B 指定
+// 数组起始索引由操作数 C 指定
 func setList(i Instruction, vm api.LuaVM) {
 	a, b, c := i.ABC()
 	a += 1
@@ -49,5 +53,19 @@ func setList(i Instruction, vm api.LuaVM) {
 		idx++
 		vm.PushValue(a + j)
 		vm.SetI(a, idx)
+	}
+
+	bIsZero := b == 0
+	if bIsZero {
+		b = int(vm.ToInteger(-1)) - a - 1
+		vm.Pop(1)
+	}
+	if bIsZero {
+		for j := vm.RegisterCount() + 1; j <= vm.GetTop(); j++ {
+			idx++
+			vm.PushValue(j)
+			vm.SetI(a, idx)
+		}
+		vm.SetTop(vm.RegisterCount())
 	}
 }

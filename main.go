@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"luago/binchunk"
+	"luago/state"
 	"luago/vm"
 	"os"
 )
@@ -15,8 +16,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		proto := binchunk.Undump(data)
-		list(proto)
+		ls := state.New(20, nil)
+		ls.Load(data, os.Args[1], "b")
+		ls.Call(0, 0)
 	}
 }
 
