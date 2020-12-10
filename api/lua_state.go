@@ -65,4 +65,12 @@ type LuaState interface {
 	// 包装 SetTable, key 由外部传入
 	SetField(idx int, k string)
 	SetI(idx int, i int64)
+
+	// 加载二进制 chunk, 把主函数原型实例化为闭包并推入栈顶
+	// mode "b", "t", "bt": 二进制, 文本, 二进制/文本
+	// return 0:成功
+	Load(chunk []byte, chunkName, mode string) int
+	// nArgs: 需要从栈顶弹出的入参数量
+	// nResults: 返回值数量, -1 表示所有返回值留在栈顶
+	Call(nArgs, nResults int)
 }

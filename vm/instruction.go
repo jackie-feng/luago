@@ -1,6 +1,9 @@
 package vm
 
-import "luago/api"
+import (
+	"fmt"
+	"luago/api"
+)
 
 // MaxArgBX BX 无符号数最大值
 const MaxArgBX = 1<<18 - 1
@@ -68,6 +71,6 @@ func (i Instruction) Execute(vm api.LuaVM) {
 	if action != nil {
 		action(i, vm)
 	} else {
-		panic(i.OpName())
+		panic(fmt.Errorf("%s not implement", i.OpName()))
 	}
 }

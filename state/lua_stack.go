@@ -5,7 +5,11 @@ type luaStack struct {
 	slots []luaValue
 	// 栈顶的下标 + 1
 	// 等于下一个推入元素的位置
-	top   int
+	top     int
+	prev    *luaStack
+	closure *closure // 闭包
+	varargs []luaValue
+	pc      int
 }
 
 func newLuaStack(size int) *luaStack {
@@ -40,6 +44,28 @@ func (s *luaStack) pop() luaValue {
 	val := s.slots[s.top]
 	s.slots[s.top] = nil
 	return val
+}
+
+func (s *luaStack) popN(n int) []luaValue {
+	v := make([]luaValue, n)
+	for i := 0; i < n; i++ {
+		v = append(v, s.pop())
+	}
+	return v
+}
+
+func (s *luaStack) pushN(vals []luaValue, n int) {
+	nVals := len(vals)
+	if n < 0 {
+		n = nVals
+	}
+	for i := 0; i < n; i++ {
+		if i < nVals {
+			s.push(vals[i])
+		} else {
+			s.push(nil)
+		}
+	}
 }
 
 // 索引转化为绝对索引
