@@ -52,8 +52,23 @@ func (self *luaState) Remove(idx int) {
 	self.Pop(1)
 }
 
-// 旋转, 找到中位点 m, p-m-t
-// 两边逆序, p<->m, m+1<->t, 再 p<->t
+/*
+n > 0
+往栈顶方向移动
+t, t-n+1, t-n, p
+t-n+1, t, p, t-n
+t-n, p, t, t-n+1
+
+n < 0
+往栈地方向移动
+x = -n
+t, p+x, p+x-1, p
+p+x, t, p, p+x-1
+p+X-1, p, t, p+x
+
+旋转, 找到中位点 m, p-m-t
+两边逆序, p<->m, m+1<->t, 再 p<->t
+*/
 func (self *luaState) Rotate(idx, n int) {
 	t := self.stack.top - 1
 	p := self.stack.absIndex(idx) - 1

@@ -1,6 +1,8 @@
 package vm
 
-import "luago/api"
+import (
+	"luago/api"
+)
 
 // R(A) := RK(B) op RK(C)
 // 二元运算指令
@@ -68,10 +70,12 @@ func concat(i Instruction, vm api.LuaVM) {
 
 // if((RK(B) op RK(C)) ~= A) then pc++
 func _compare(i Instruction, vm api.LuaVM, op api.CompareOp) {
+	// a: 1/0: 条件满足时, 是/否执行下一步命令
 	a, b, c := i.ABC()
 	vm.GetRK(b)
 	vm.GetRK(c)
-	if vm.Compare(-2, -1, op) == (a == 0) {
+	t := vm.Compare(-2, -1, op)
+	if t == (a == 0) {
 		vm.AddPC(1)
 	}
 	vm.Pop(2)

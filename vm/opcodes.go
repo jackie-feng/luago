@@ -6,7 +6,7 @@ import "luago/api"
 const (
 	IABC = iota
 	IABx
-	IAsBx
+	IAsBx // A, sBx: sBx 为有符号数
 	IAx
 )
 
@@ -94,7 +94,7 @@ var opcodes = []opcode{
 	opcode{0, 0, OpArgU, OpArgN, IABC, "SETUPVAL", nil},
 	opcode{0, 0, OpArgK, OpArgK, IABC, "SETTABLE", setTable},
 	opcode{0, 1, OpArgU, OpArgU, IABC, "NEWTABLE", newTable},
-	opcode{0, 1, OpArgR, OpArgK, IABC, "SELF", nil},
+	opcode{0, 1, OpArgR, OpArgK, IABC, "SELF", self},
 	opcode{0, 1, OpArgK, OpArgK, IABC, "ADD", add},
 	opcode{0, 1, OpArgK, OpArgK, IABC, "SUB", sub},
 	opcode{0, 1, OpArgK, OpArgK, IABC, "MUL", mul},
@@ -118,15 +118,15 @@ var opcodes = []opcode{
 	opcode{1, 0, OpArgK, OpArgK, IABC, "LE", le},
 	opcode{1, 0, OpArgN, OpArgU, IABC, "TEST", test},
 	opcode{1, 1, OpArgR, OpArgU, IABC, "TESTSET", testset},
-	opcode{0, 1, OpArgU, OpArgU, IABC, "CALL", nil},
-	opcode{0, 1, OpArgU, OpArgU, IABC, "TALLCALL", nil},
-	opcode{0, 0, OpArgU, OpArgN, IABC, "RETURN", nil},
+	opcode{0, 1, OpArgU, OpArgU, IABC, "CALL", call},
+	opcode{0, 1, OpArgU, OpArgU, IABC, "TALLCALL", tailCall},
+	opcode{0, 0, OpArgU, OpArgN, IABC, "RETURN", _return},
 	opcode{0, 1, OpArgR, OpArgN, IAsBx, "FORLOOP", forLoop},
 	opcode{0, 1, OpArgR, OpArgN, IAsBx, "FORPREP", forPrep},
 	opcode{0, 0, OpArgN, OpArgU, IABC, "TFORCALL", nil},
 	opcode{0, 1, OpArgR, OpArgN, IAsBx, "TFORLOOP", nil},
 	opcode{0, 0, OpArgU, OpArgU, IABC, "SETLIST", setList},
-	opcode{0, 1, OpArgU, OpArgN, IABx, "CLOSURE", nil},
-	opcode{0, 1, OpArgU, OpArgN, IABC, "VARARG", nil},
+	opcode{0, 1, OpArgU, OpArgN, IABx, "CLOSURE", closure},
+	opcode{0, 1, OpArgU, OpArgN, IABC, "VARARG", vararg},
 	opcode{0, 0, OpArgU, OpArgU, IAx, "EXTRAARG", nil},
 }
