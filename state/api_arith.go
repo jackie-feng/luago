@@ -7,31 +7,31 @@ import (
 )
 
 var (
-	iadd  = func(a, b int64) int64 { return a + b }
-	fadd  = func(a, b float64) float64 { return a + b }
-	isub  = func(a, b int64) int64 { return a - b }
-	fsub  = func(a, b float64) float64 { return a - b }
-	imul  = func(a, b int64) int64 { return a * b }
-	fmul  = func(a, b float64) float64 { return a * b }
+	iadd = func(a, b int64) int64 { return a + b }
+	fadd = func(a, b float64) float64 { return a + b }
+	isub = func(a, b int64) int64 { return a - b }
+	fsub = func(a, b float64) float64 { return a - b }
+	imul = func(a, b int64) int64 { return a * b }
+	fmul = func(a, b float64) float64 { return a * b }
 	// 求余
-	imod  = number.IMod
-	fmod  = number.FMod
-	pow   = math.Pow
+	imod = number.IMod
+	fmod = number.FMod
+	pow  = math.Pow
 	// 除法
-	div   = func(a, b float64) float64 { return a / b }
+	div = func(a, b float64) float64 { return a / b }
 	// 整除
 	iidiv = number.IFloorDiv
 	fidiv = number.FFloorDiv
 	// 与 或 异或
-	band  = func(a, b int64) int64 { return a & b }
-	bor   = func(a, b int64) int64 { return a | b }
-	bxor  = func(a, b int64) int64 { return a ^ b }
+	band = func(a, b int64) int64 { return a & b }
+	bor  = func(a, b int64) int64 { return a | b }
+	bxor = func(a, b int64) int64 { return a ^ b }
 	// 左移 右移
-	shl   = number.ShiftLeft
-	shr   = number.ShiftRight
-	iunm  = func(a, _ int64) int64 { return -a }
-	funm  = func(a, _ float64) float64 { return -a }
-	bnot  = func(a, _ int64) int64 { return ^a } // TODO
+	shl  = number.ShiftLeft
+	shr  = number.ShiftRight
+	iunm = func(a, _ int64) int64 { return -a }
+	funm = func(a, _ float64) float64 { return -a }
+	bnot = func(a, _ int64) int64 { return ^a } // TODO
 )
 
 type operator struct {

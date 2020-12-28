@@ -1,6 +1,7 @@
 package state
 
 import (
+	"fmt"
 	"luago/api"
 	"luago/number"
 )
@@ -22,8 +23,31 @@ func typeOf(val luaValue) LuaType {
 		return api.LuaTString
 	case *luaTable:
 		return api.LuaTTable
+	case *closure:
+		return api.LuaTFunction
 	default:
 		panic("todo!")
+	}
+}
+
+func stringOf(val luaValue) string {
+	switch val.(type) {
+	case nil:
+		return "[nil]"
+	case bool:
+		return fmt.Sprintf("[%t]", val.(bool))
+	case int64:
+		return fmt.Sprintf("[%g]", float64(val.(int64)))
+	case string:
+		return fmt.Sprintf("[%q]", val.(string))
+	case float64:
+		return fmt.Sprintf("[%g]", val.(float64))
+	case *luaTable:
+		return "[luaTable]"
+	case *closure:
+		return "[closure]"
+	default:
+		return fmt.Sprintf("[%s]", val)
 	}
 }
 

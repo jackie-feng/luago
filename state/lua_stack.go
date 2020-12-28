@@ -1,11 +1,53 @@
 package state
 
+import (
+	"fmt"
+	"strings"
+	"unsafe"
+)
+
 // 索引从 1 开始
 type luaStack struct {
 	slots []luaValue
 	// 栈顶的下标 + 1
 	// 等于下一个推入元素的位置
-	top   int
+	top     int
+	prev    *luaStack
+	closure *closure // 闭包
+	varargs []luaValue
+	pc      int
+}
+
+func (ls *luaStack) String() string {
+	top := ls.top
+	tmp := make([]string, 0, top)
+	for idx, val := range ls.slots {
+		if idx+1 == ls.top {
+			tmp = append(tmp, "🌟"+stringOf(val))
+		} else {
+			tmp = append(tmp, stringOf(val))
+		}
+	}
+	varargsStrings := make([]string, 0, len(ls.varargs))
+	for _, val := range ls.varargs {
+		varargsStrings = append(varargsStrings, stringOf(val))
+	}
+	return strings.Join([]string{
+		"--------------stack begin---------------",
+		fmt.Sprintf("stack: %v, registerCount: %d", unsafe.Pointer(ls), ls.registerCount()),
+		fmt.Sprintf("pc: %d, top: %d", ls.pc, ls.top),
+		fmt.Sprintf("slots len: %d", len(ls.slots)),
+		fmt.Sprintf("slots: %s", strings.Join(tmp, ",")),
+		fmt.Sprintf("varargs len: %d", len(ls.varargs)),
+		fmt.Sprintf("varargs: %s", strings.Join(varargsStrings, ",")),
+		"--------------stack   end---------------",
+	}, "\n")
+}
+func (ls *luaStack) registerCount() int {
+	if ls.closure != nil {
+		return int(ls.closure.proto.MaxStackSize)
+	}
+	return 0
 }
 
 func newLuaStack(size int) *luaStack {
@@ -40,6 +82,28 @@ func (s *luaStack) pop() luaValue {
 	val := s.slots[s.top]
 	s.slots[s.top] = nil
 	return val
+}
+
+func (s *luaStack) popN(n int) []luaValue {
+	v := make([]luaValue, n)
+	for i := n - 1; i >= 0; i-- {
+		v[i] = s.pop()
+	}
+	return v
+}
+
+func (s *luaStack) pushN(vals []luaValue, n int) {
+	nVals := len(vals)
+	if n < 0 {
+		n = nVals
+	}
+	for i := 0; i < n; i++ {
+		if i < nVals {
+			s.push(vals[i])
+		} else {
+			s.push(nil)
+		}
+	}
 }
 
 // 索引转化为绝对索引
