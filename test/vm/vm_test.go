@@ -1,12 +1,8 @@
 package vm
 
 import (
-	"fmt"
 	"io/ioutil"
-	"luago/binchunk"
 	"luago/state"
-	"luago/test/support"
-	"luago/vm"
 	"testing"
 )
 
@@ -15,23 +11,22 @@ func TestVM(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	proto := binchunk.Undump(data)
-	luaMain(proto)
+	luaMain(data)
 }
 
-func luaMain(proto *binchunk.Prototype) {
-	nRegs := int(proto.MaxStackSize)
-	ls := state.New(nRegs+8, proto)
-	ls.SetTop(nRegs)
-	for {
-		pc := ls.PC()
-		inst := vm.Instruction(ls.Fetch())
-		if inst.Opcode() != vm.OpReturn {
-			inst.Execute(ls)
-			fmt.Printf("[%02d]\t%s\t", pc+1, inst.OpName())
-			support.PrintStack(ls)
-		} else {
-			break
-		}
-	}
+func luaMain(chunk []byte) {
+	ls := state.New(20, nil)
+	ls.Load(chunk, "main", "b")
+	ls.Call(0, 0)
+	//for {
+	//	pc := ls.PC()
+	//	inst := vm.Instruction(ls.Fetch())
+	//	if inst.Opcode() != vm.OpReturn {
+	//		inst.Execute(ls)
+	//		fmt.Printf("[%02d]\t%s\t", pc+1, inst.OpName())
+	//		support.PrintStack(ls)
+	//	} else {
+	//		break
+	//	}
+	//}
 }
